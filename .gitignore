@@ -1,0 +1,5 @@
+*.swp
+*.swo
+
+# Compiled server vinary
+server/server
