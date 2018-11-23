@@ -13,9 +13,10 @@ var incr statType = 0
 var point statType = 1
 
 type stat struct {
-	type_ statType
-	tag   string
-	value int64
+	type_  statType
+	tag    string
+	millis int64
+	value  int64
 }
 
 type Stats struct {
