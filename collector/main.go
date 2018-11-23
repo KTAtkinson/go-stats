@@ -7,12 +7,12 @@ import (
 type statType int
 
 // An incrementing counter
-var incr statType = 0
+var Counter statType = 0
 
 // A statitic with distrete data points
-var point statType = 1
+var Point statType = 1
 
-type stat struct {
+type Stat struct {
 	type_  statType
 	tag    string
 	millis int64
@@ -27,12 +27,12 @@ type Stats struct {
 }
 
 // Increments the counter with the given tag.
-func (s *Stats) Count(tag string) error {
+func (s *Stats) Count(counts []*Stat) error {
 	return NOT_IMPLEMENTED
 }
 
 // Records a data point with the given value with the given tag.
-func (s *Stats) Record(tag, point int64) error {
+func (s *Stats) Record([]*Stat) error {
 	return NOT_IMPLEMENTED
 }
 
