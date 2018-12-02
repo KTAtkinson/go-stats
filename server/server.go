@@ -3,12 +3,12 @@ package main
 import (
   "net/http"
 
-//  "github.com/KTAtkinson/go-stats/collector"
+ "github.com/KTAtkinson/go-stats/collector"
 )
 
 type CollectorIface interface {
-   Count(string) error
-   Record( string, int64) error
+   Count([]*collector.Stat) error
+   Record([]*collector.Stat) error
 }
 
 type StatsServer struct {
