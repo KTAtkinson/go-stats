@@ -1,8 +1,8 @@
 package collector
 
 import (
-	"fmt"
 	"sync"
+	"time"
 )
 
 type Stat struct {
@@ -55,8 +55,10 @@ func (s *Collector) Flush() error {
 }
 
 // Flushes stats indefinately at interval
-func (s *Collector) FlushAlways(interval int) {
-	fmt.Print("FlushAlways not implimented. Not flushing. Exiting...")
+func (s *Collector) FlushAlways(interval time.Duration, errs chan<- error) {
+	for range time.Tick(interval) {
+		errs <- s.Flush()
+	}
 }
 
 type OnDiskFlusher struct {

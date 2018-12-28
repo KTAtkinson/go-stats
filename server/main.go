@@ -33,7 +33,18 @@ func main() {
 		collector = stats.NewOnDiskCollector(url_.String())
 	}
 
-	collector.FlushAlways(flushIntervalSecs)
+	errs := make(chan error)
+	go collector.FlushAlways(flushDuration, errs)
+	go func() {
+		log.Println("Recording errors while flushing")
+		for err := range errs {
+			if err != nil {
+				log.Printf("Error while flushing stats. %s\n", err)
+			} else {
+				log.Printf("Flushing complete")
+			}
+		}
+	}()
 
 	apiServer := http.NewServeMux()
 	go func() {
