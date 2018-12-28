@@ -1,14 +1,15 @@
 package main
 
 import (
+  "fmt"
   "net/http"
 
-//  "github.com/KTAtkinson/go-stats/collector"
+  "github.com/KTAtkinson/go-stats/collector"
 )
 
 type CollectorIface interface {
-   Count(string) error
-   Record( string, int64) error
+   Record(string, []*collector.Stat) error
+   FlushAlways(int)
 }
 
 type StatsServer struct {
@@ -21,8 +22,8 @@ type StatsServer struct {
 // * /collect/counts
 // + /list/points/{name}
 // * /list/counter/{name}
-func Start(port string, collector CollectorIface) error {
-    return NOT_IMPLEMENTED
+func Start(port int, collector CollectorIface) {
+    fmt.Print("No server to run")
 }
 
 // Record data points in collector.
@@ -42,5 +43,5 @@ func (s *StatsServer) GetPoints(http.ResponseWriter, *http.Request) error {
 
 // Retrieve current count for given tag.
 func (s *StatsServer) GetCounter(http.ResponseWriter, *http.Request) error {
-    return NOT_IMPLEMENTED
+	return NOT_IMPLEMENTED
 }
