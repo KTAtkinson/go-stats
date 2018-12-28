@@ -36,6 +36,14 @@ type Collector struct {
 	flusher FlusherIface
 }
 
+func NewCollector(flusher FlusherIface) *Collector {
+	var recorder StatsRecorder
+	return &Collector{
+		stats: recorder,
+		flusher: flusher,
+	}
+}
+
 // Records a data point with the given value with the given tag.
 func (s *Collector) Record(name string, stats []*Stat) error {
 	return NOT_IMPLEMENTED
@@ -47,15 +55,22 @@ func (s *Collector) Flush() error {
 }
 
 // Flushes stats indefinately at interval
-func (s *Stats) FlushAlways(interval int) {
+func (s *Collector) FlushAlways(interval int) {
 	fmt.Print("FlushAlways not implimented. Not flushing. Exiting...")
 }
 
-type DiskFlusher struct {
-	flushRoot string
+type OnDiskFlusher struct {
+	flusherRoot string
 }
 
 // Flushes values to disk
-func (d *DiskFlusher) Flush(stats StatsRecorder) error {
+func (d *OnDiskFlusher) Flush(stats StatsRecorder) error {
 	return NOT_IMPLEMENTED
+}
+
+func NewOnDiskCollector(fp string) *Collector {
+	flusher := OnDiskFlusher{
+		flusherRoot: fp,
+	}
+	return NewCollector(&flusher)
 }

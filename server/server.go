@@ -1,20 +1,20 @@
 package main
 
 import (
-  "fmt"
-  "net/http"
+	"fmt"
+	"net/http"
 
-  "github.com/KTAtkinson/go-stats/collector"
+	"github.com/KTAtkinson/go-stats/collector"
 )
 
 type CollectorIface interface {
-   Record(string, []*collector.Stat) error
-   FlushAlways(int)
+	Record(string, []*collector.Stat) error
+	FlushAlways(int)
 }
 
 type StatsServer struct {
-    Collector CollectorIface
-    Server *http.Server
+	Collector CollectorIface
+	Server    *http.Server
 }
 
 // Create a server to record and report metrics. The following endoints are included:
@@ -23,22 +23,22 @@ type StatsServer struct {
 // + /list/points/{name}
 // * /list/counter/{name}
 func Start(port int, collector CollectorIface) {
-    fmt.Print("No server to run")
+	fmt.Println("No server to run")
 }
 
 // Record data points in collector.
 func (s *StatsServer) CollectPoint(http.ResponseWriter, *http.Request) error {
-    return NOT_IMPLEMENTED
+	return NOT_IMPLEMENTED
 }
 
 // Increment a counter.
 func (s *StatsServer) CollectCount(http.ResponseWriter, *http.Request) error {
-    return NOT_IMPLEMENTED
+	return NOT_IMPLEMENTED
 }
 
 // List recorded points for a given tag.
 func (s *StatsServer) GetPoints(http.ResponseWriter, *http.Request) error {
-    return NOT_IMPLEMENTED
+	return NOT_IMPLEMENTED
 }
 
 // Retrieve current count for given tag.
