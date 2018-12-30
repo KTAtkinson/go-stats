@@ -2,18 +2,18 @@ package collector
 
 import (
 	"fmt"
-	"path/filepath"
-	"os"
-	"log"
 	"io"
-	"sync"
+	"log"
+	"os"
+	"path/filepath"
 	"sort"
+	"sync"
 	"time"
 )
 
 type Stat struct {
-	time time.Time
-	value  int64
+	time  time.Time
+	value int64
 }
 
 type FlusherIface interface {
@@ -21,7 +21,7 @@ type FlusherIface interface {
 }
 
 type Stats struct {
-	lock *sync.Mutex
+	lock  *sync.Mutex
 	stats []*Stat
 }
 
@@ -51,7 +51,7 @@ type Collector struct {
 func NewCollector(flusher FlusherIface) *Collector {
 	var recorder StatsRecorder
 	return &Collector{
-		stats: recorder,
+		stats:   recorder,
 		flusher: flusher,
 	}
 }
@@ -90,13 +90,13 @@ func (d *OnDiskFlusher) Flush(stats StatsRecorder) (err error) {
 		var roundedTime time.Time
 		var writer io.WriteCloser
 		for _, evt := range entries {
-			roundedEventTime := evt.time.UTC().Round( time.Hour * 24 )
+			roundedEventTime := evt.time.UTC().Round(time.Hour * 24)
 			if roundedEventTime != roundedTime {
 				if writer != nil {
 					writer.Close()
 				}
 				fullPath := filepath.Join(d.flusherRoot, name, fmt.Sprintf("%d", roundedTime.Unix()))
-				fileMode := os.O_WRONLY|os.O_APPEND|os.O_CREATE
+				fileMode := os.O_WRONLY | os.O_APPEND | os.O_CREATE
 				writer, err = os.OpenFile(fullPath, fileMode, 0644)
 				// This may mean the directory doesn't exist, so create it and see if the error goes away.
 				if os.IsNotExist(err) {
@@ -112,7 +112,7 @@ func (d *OnDiskFlusher) Flush(stats StatsRecorder) (err error) {
 					continue
 				}
 			}
-			writer.Write([]byte( fmt.Sprintf("%d %d", evt.time.Unix(), evt.value) ))
+			writer.Write([]byte(fmt.Sprintf("%d %d", evt.time.Unix(), evt.value)))
 		}
 	}
 	return err
