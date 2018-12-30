@@ -30,7 +30,13 @@ func (s *Stats) Record(stats []*Stat) error {
 }
 
 func (s *Stats) Reset() ([]*Stat, error) {
-	return nil, NOT_IMPLEMENTED
+	s.lock.Lock()
+
+	value := s.stats
+	s.stats = make([]*Stat, 0)
+
+	s.lock.Unlock()
+	return value, nil
 }
 
 type StatsRecorder map[string]*Stats
