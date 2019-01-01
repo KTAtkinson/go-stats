@@ -95,12 +95,12 @@ func (d *OnDiskFlusher) Flush(stats StatsRecorder) (err error) {
 				if writer != nil {
 					writer.Close()
 				}
-				fullPath := filepath.Join(d.flusherRoot, name, fmt.Sprintf("%d", roundedTime.Unix()))
+				fullPath := filepath.Join(d.flusherRoot, name, fmt.Sprintf("%d", roundedEventTime.Unix()))
 				fileMode := os.O_WRONLY | os.O_APPEND | os.O_CREATE
 				writer, err = os.OpenFile(fullPath, fileMode, 0644)
 				// This may mean the directory doesn't exist, so create it and see if the error goes away.
 				if os.IsNotExist(err) {
-					err = os.MkdirAll(filepath.Dir(fullPath), 0644)
+					err = os.MkdirAll(filepath.Dir(fullPath), 0744)
 					if err != nil {
 						log.Printf("Failed to created new directory to record stats for %s.\n", name)
 						continue
@@ -108,7 +108,7 @@ func (d *OnDiskFlusher) Flush(stats StatsRecorder) (err error) {
 					writer, err = os.OpenFile(fullPath, fileMode, 0644)
 				}
 				if err != nil {
-					log.Printf("Not able to open file %s to record stats for %s.", fullPath, name)
+					log.Printf("Not able to open file %s to record stats for %s. %s", fullPath, name, err)
 					continue
 				}
 			}
